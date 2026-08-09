@@ -1,0 +1,44 @@
+{
+  "categories": [
+    {
+      "category": "Guide",
+      "keywords": [
+        "fields of mistria guide",
+        "fields of mistria achievements"
+      ]
+    },
+    {
+      "category": "Romance & Characters",
+      "keywords": [
+        "fields of mistria romance",
+        "fields of mistria gifts",
+        "fields of mistria characters"
+      ]
+    },
+    {
+      "category": "Farm & Infrastructure",
+      "keywords": [
+        "fields of mistria farm layout",
+        "fields of mistria animals",
+        "fields of mistria stone refinery"
+      ]
+    },
+    {
+      "category": "Items & Gathering",
+      "keywords": [
+        "fields of mistria deep woods fish",
+        "fields of mistria water chestnuts",
+        "fields of mistria shovel",
+        "fields of mistria backpack"
+      ]
+    },
+    {
+      "category": "Technical & Mods",
+      "keywords": [
+        "fields of mistria mods",
+        "fields of mistria multiplayer",
+        "fields of mistria chinese patch"
+      ]
+    }
+  ]
+}

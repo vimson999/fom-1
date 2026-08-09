@@ -37,11 +37,11 @@
 
 ## 内容来源与依据
 
-所有正式游戏内容应优先来自以下已有资料：
+所有正式游戏内容应优先来自项目内的 `references/`：
 
-- `../关键字&素材/Fields of Mistria - All 30 Documents/`：十个主题的 Raw Full Text、Official Steam Text 与 YouTube Transcripts。
-- `../关键字&素材/关键字.json`：关键词分类参考。
-- 第 4 关调研说明：官方链接、首页文案、SEO、主题色、语言优先级和兑换码状态。
+- `references/source-materials/Fields of Mistria - All 30 Documents/`：十个主题的 Raw Full Text、Official Steam Text 与 YouTube Transcripts。
+- `references/keywords.json`：关键词分类参考。
+- `references/stage-4-project-research.md`：官方链接、首页文案、SEO、主题色、语言优先级和兑换码状态。
 
 首页已确认的官方入口：
 

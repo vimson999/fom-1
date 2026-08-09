@@ -1,0 +1,11 @@
+需求类型,关键词 (Keyword),解决的真实用户问题,页面类型,页面规划策略
+通用需求,fields of mistria guide,新手刚入坑不知道怎么玩，需要系统性指导,首页 / 导航枢纽,不写废话，直接放各大具体攻略内页的分类入口。
+通用需求,fields of mistria characters,想知道游戏里有哪些 NPC，谁可以结婚,导航页,列出所有 NPC 头像，点击跳转单人页面。
+通用需求,fields of mistria farm layout,农场太空了，需要一些高效或美观的摆放参考,高价值攻略页,放几套精美的网格规划图，延长用户停留时间。
+通用需求,fields of mistria items,需要全物品收集的图鉴对照,导航页 / 聚合页,按季节、类别进行网格化展示。
+个性需求,how to get shovel fields of mistria,刚开局卡关，不知道去哪买铲子，多少钱,物品内页,极简图文，直接放杂货店地图位置和价格 500t。
+个性需求,water chestnuts fields of mistria,任务需要荸荠，但在地图上死活找不到,物品内页,截图圈出特定季节的水域采集点。
+个性需求,fields of mistria deep woods fish,不知道深林鱼类的具体出没季节和位置,物品内页,列出深林专属鱼类及刷新条件时间表。
+个性需求,stone loach fields of mistria,卡任务钓不到石鳅,物品内页,明确标出钓石鳅的水域、天气和季节。
+个性需求,olric fields of mistria gifts,想追 Olric，不想送错东西浪费材料,角色内页,单独为 Olric 建一页，放上喜好物品清单表格。
+个性需求,wedding outfits fields of mistria,想看结婚时的特定服装外观,外观展示页,多角度高清截图展示不同服装上身效果。
