@@ -5,7 +5,7 @@ import Home from '@/app/page';
 describe('Home', () => {
   it('renders the wiki hero and database entry point', () => {
     render(<Home />);
-    expect(screen.getByRole('heading', { name: /fields of mistria wiki/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /browse the database/i })).toHaveAttribute('href', '/database/items');
+    expect(screen.getByRole('heading', { name: 'Fields of Mistria' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /start beginner guide/i })).toHaveAttribute('href', '/guides');
   });
 });

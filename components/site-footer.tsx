@@ -1,5 +1,4 @@
 import Link from 'next/link';
+import { site } from '@/lib/site';
 
-export function SiteFooter() {
-  return <footer className="site-footer"><div className="shell footer-inner"><p>Fields of Mistria Wiki is an unofficial fan guide.</p><p>Not affiliated with NPC Studio. Game names and trademarks belong to their respective owners.</p><Link href="/database/items">Browse the database</Link></div></footer>;
-}
+export function SiteFooter() { return <footer className="site-footer"><div className="shell footer-inner"><div><strong>Fields of Mistria Wiki</strong><p>Fields of Mistria Wiki is an independent fan-made guide database. We provide accurate item locations, gift guides, and gameplay tips for all players.</p></div><div><strong>Official links</strong><p><a href={site.officialLinks.website}>Official Website</a><a href={site.officialLinks.steam}>Play on Steam</a><a href={site.officialLinks.discord}>Official Discord</a><a href={site.officialLinks.youtube}>Official YouTube</a></p></div><div><strong>Wiki</strong><p><Link href="/database/items">Item database</Link><Link href="/guides">All guides</Link><span>Privacy Policy — 待确认</span><span>Terms of Service — 待确认</span></p></div></div><div className="shell footer-legal">Cozy 90s anime-inspired farming RPG on Steam. Rebuild Mistria with farming, magic, and romance. Not affiliated with NPC Studio.</div></footer>; }

@@ -9,7 +9,7 @@ export function SiteHeader() {
         <nav aria-label="Primary navigation" className="primary-nav">
           {site.navigation.map((item) => <Link key={item.label} href={item.href}>{item.label}</Link>)}
         </nav>
-        <div className="header-actions"><button aria-label="Search the wiki" className="icon-button">⌕</button><button className="language-button">English</button></div>
+        <div className="header-actions"><button aria-label="Search the wiki" className="icon-button">⌕</button><select className="language-button" aria-label="Site language" defaultValue="en">{site.languages.map((language) => <option key={language.code} value={language.code} disabled={!language.active}>{language.label}{language.active ? '' : ' — Coming soon'}</option>)}</select></div>
       </div>
     </header>
   );
