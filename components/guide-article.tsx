@@ -12,10 +12,6 @@ export function GuideArticle({ guide }: { guide: GuideArticleEntry }) {
     <nav className="breadcrumbs" aria-label="Breadcrumb">
       <Link href="/">Home</Link><span>/</span><Link href="/guides">Guides</Link><span>/</span><span>{guide.keyword}</span>
     </nav>
-    <header className="detail-hero">
-      <h1>{guide.title}</h1>
-      <p>{guide.description}</p>
-    </header>
     <Content />
     <section>
       <h2>Article sources</h2>
