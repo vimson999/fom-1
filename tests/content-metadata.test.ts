@@ -22,6 +22,24 @@ function assertValidSources(source: string) {
   }
 }
 
+function sourceUrls(source: string) {
+  const sources = source.match(/sources:\s*\[([\s\S]*?)\n\s*\]/)?.[1] ?? '';
+  return [...sources.matchAll(/url:\s*['"]([^'"]+)['"]/g)].map((match) => match[1]);
+}
+
+const requiredSourceUrlsBySlug = {
+  'fields-of-mistria-items': [
+    'https://www.fieldsofmistria.com/post/fields-of-mistria-s-1-0-update-patch-notes-are-here',
+    'https://www.fieldsofmistria.com/post/fields-of-mistria-s-fourth-major-update-patch-notes-are-here-1',
+    'https://steamcommunity.com/sharedfiles/filedetails/?id=3314735754',
+    'https://www.reddit.com/r/FieldsOfMistriaGame/comments/1eqsfxe/fields_of_mistria_spreadsheet/'
+  ],
+  'water-chestnuts-fields-of-mistria': [
+    'https://www.reddit.com/r/FieldsOfMistriaGame/comments/1ekxfnb/water_chestnuts/',
+    'https://steamcommunity.com/app/2142790/discussions/0/598524246085399925/'
+  ]
+} as const;
+
 describe('guide content metadata', () => {
   it('rejects a malformed source even when another source is valid', () => {
     const mixedSources = `sources: [
@@ -55,4 +73,13 @@ describe('guide content metadata', () => {
       assertValidSources(source);
     }
   });
+
+  it.each(Object.entries(requiredSourceUrlsBySlug))(
+    'publishes every archived source used by %s',
+    (slug, requiredUrls) => {
+      const source = fs.readFileSync(path.join(guidesDirectory, `${slug}.mdx`), 'utf8');
+
+      expect(sourceUrls(source)).toEqual(expect.arrayContaining([...requiredUrls]));
+    }
+  );
 });

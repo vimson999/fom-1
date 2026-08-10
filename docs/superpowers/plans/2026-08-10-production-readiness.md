@@ -147,7 +147,7 @@ npm run lint
 npm run typecheck
 npm test
 npm run build
-npm audit --omit=dev --audit-level=high
+npm audit --omit=dev
 ```
 
 - [ ] **Step 8: Commit the toolchain batch**

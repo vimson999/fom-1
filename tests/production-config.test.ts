@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 type Header = { key: string; value: string };
@@ -28,5 +30,19 @@ describe('production configuration', () => {
     expect(headers['permissions-policy']).toContain('camera=()');
     expect(headers['x-frame-options']).toBe('DENY');
     expect(headers['strict-transport-security']).toContain('max-age=63072000');
+  });
+
+  it('fails CI for any known production dependency advisory', () => {
+    const workflow = fs.readFileSync(
+      path.join(process.cwd(), '.github/workflows/ci.yml'),
+      'utf8'
+    );
+    const runCommands = [...workflow.matchAll(/^\s*-\s+run:\s*(.+)$/gm)].map((match) =>
+      match[1].trim()
+    );
+
+    expect(runCommands.filter((command) => command.startsWith('npm audit'))).toEqual([
+      'npm audit --omit=dev'
+    ]);
   });
 });
