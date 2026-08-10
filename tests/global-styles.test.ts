@@ -67,6 +67,67 @@ function declarationBlock(selector: string) {
   return css.match(new RegExp(`${escapedSelector}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
 }
 
+function selectorSpecificity(selector: string) {
+  const ids = selector.match(/#[\w-]+/g)?.length ?? 0;
+  const classLike = selector.match(/\.[\w-]+|\[[^\]]+\]|:(?!:|not\b)[\w-]+/g)?.length ?? 0;
+  const withoutFunctionalSelectors = selector.replace(/:(?:not|is|has|where)\([^)]*\)/g, '');
+  const types = withoutFunctionalSelectors.match(/(?:^|[\s>+~])(?:[a-z][\w-]*|::[\w-]+)/gi)?.length ?? 0;
+
+  return [ids, classLike, types] as const;
+}
+
+function cascadedCardShadow(className: string) {
+  const statefulCss = css
+    .replaceAll(':hover', '[data-hover]')
+    .replaceAll(':focus-visible', '[data-focus-visible]');
+  const style = document.createElement('style');
+  const card = document.createElement('a');
+  style.textContent = statefulCss;
+  card.className = className;
+  card.toggleAttribute('data-hover', true);
+  card.toggleAttribute('data-focus-visible', true);
+  document.head.append(style);
+  document.body.append(card);
+  if (!style.sheet) throw new Error('Unable to build the card style fixture');
+
+  let sourceOrder = 0;
+  let winner: { important: boolean; specificity: readonly number[]; order: number; value: string } | undefined;
+
+  function visit(rules: CSSRuleList) {
+    for (const rule of Array.from(rules)) {
+      if ('cssRules' in rule) visit((rule as CSSGroupingRule).cssRules);
+      if (rule.type !== CSSRule.STYLE_RULE) continue;
+      const styleRule = rule as CSSStyleRule;
+
+      for (const selector of styleRule.selectorText.split(',')) {
+        const value = styleRule.style.getPropertyValue('box-shadow').trim();
+        const candidate = {
+          important: styleRule.style.getPropertyPriority('box-shadow') === 'important',
+          specificity: selectorSpecificity(selector),
+          order: sourceOrder++,
+          value
+        };
+        if (!value || !card.matches(selector.trim())) continue;
+
+        const candidateRank = [Number(candidate.important), ...candidate.specificity, candidate.order];
+        const winnerRank = winner
+          ? [Number(winner.important), ...winner.specificity, winner.order]
+          : [-1, -1, -1, -1, -1];
+        if (candidateRank.some((part, index) => part !== winnerRank[index]
+          && part > winnerRank[index]
+          && candidateRank.slice(0, index).every((rank, rankIndex) => rank === winnerRank[rankIndex]))) {
+          winner = candidate;
+        }
+      }
+    }
+  }
+
+  visit(style.sheet.cssRules);
+  style.remove();
+  card.remove();
+  return winner?.value;
+}
+
 describe('global color accessibility', () => {
   it('uses a separate gold text accent with normal-text contrast on light surfaces', () => {
     const textAccent = tokens.get('--gold-text') ?? token('--gold');
@@ -90,6 +151,13 @@ describe('global color accessibility', () => {
     expect(focusStyle).toContain('outline:2px solid var(--focus-light)');
     expect(focusStyle).toContain('box-shadow:0 0 0 6px var(--focus-dark)');
   });
+
+  it.each(['category-card', 'item-card'])(
+    'preserves the dark focus layer when a hovered %s receives keyboard focus',
+    (className) => {
+      expect(cascadedCardShadow(className)).toBe('0 0 0 6px var(--focus-dark)');
+    }
+  );
 
   it('keeps normal-size footer gold readable on the dark footer surface', () => {
     const footerAccent = tokens.get('--gold-on-dark') ?? token('--gold');
