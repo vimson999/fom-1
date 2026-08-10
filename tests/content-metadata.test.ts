@@ -9,7 +9,29 @@ function propertyValue(source: string, property: string) {
   return source.match(new RegExp(`${property}: ['\"]([^'\"]+)['\"]`))?.[1];
 }
 
+function assertValidSources(source: string) {
+  const sources = source.match(/sources:\s*\[([\s\S]*?)\n\s*\]/)?.[1] ?? '';
+  const sourceEntries = [...sources.matchAll(/\{([\s\S]*?)\}/g)].map((match) => match[1]);
+  expect(sourceEntries.length).toBeGreaterThan(0);
+  for (const sourceEntry of sourceEntries) {
+    const label = sourceEntry.match(/label:\s*['\"]([^'\"]*)['\"]/)?.[1];
+    const url = sourceEntry.match(/url:\s*['\"]([^'\"]*)['\"]/)?.[1];
+
+    expect(label?.trim()).toBeTruthy();
+    expect(url).toMatch(/^https:\/\//);
+  }
+}
+
 describe('guide content metadata', () => {
+  it('rejects a malformed source even when another source is valid', () => {
+    const mixedSources = `sources: [
+      { label: 'Steam Community: Beginner Guide', url: 'https://steamcommunity.com/sharedfiles/filedetails/?id=3301328479' },
+      { label: '', url: 'http://example.com/not-secure' }
+    ]`;
+
+    expect(() => assertValidSources(mixedSources)).toThrow();
+  });
+
   it('keeps every guide in typed, non-rendering metadata exports', () => {
     expect(guideFiles).toHaveLength(10);
 
@@ -30,13 +52,7 @@ describe('guide content metadata', () => {
       expect(description?.length).toBeLessThanOrEqual(160);
       expect(propertyValue(source, 'updated')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
-      const sources = source.match(/sources:\s*\[([\s\S]*?)\n\s*\]/)?.[1] ?? '';
-      const sourceEntries = [...sources.matchAll(/\{\s*label:\s*['\"]([^'\"]+)['\"],\s*url:\s*['\"](https:\/\/[^'\"]+)['\"]\s*\}/g)];
-      expect(sourceEntries.length).toBeGreaterThan(0);
-      for (const [, label, url] of sourceEntries) {
-        expect(label.trim()).not.toBe('');
-        expect(url).toMatch(/^https:\/\//);
-      }
+      assertValidSources(source);
     }
   });
 });
