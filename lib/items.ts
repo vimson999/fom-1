@@ -1,4 +1,4 @@
-export type Source = { label: string; url: string };
+import type { ContentSource } from '@/lib/content';
 
 export type WikiItem = {
   slug: string;
@@ -7,7 +7,7 @@ export type WikiItem = {
   category: 'Forage' | 'Fish' | 'Tool';
   acquisition: string;
   relatedSlugs: string[];
-  sources: Source[];
+  sources: readonly ContentSource[];
 };
 
 export const items: WikiItem[] = [
@@ -26,20 +26,31 @@ export const items: WikiItem[] = [
   {
     slug: 'stone-loach',
     name: 'Stone Loach',
-    summary: 'A fish entry reserved for the verified fishing guide.',
+    summary: 'A medium-shadow Upper Mines fish found in all seasons and any weather, with a place in the Museum’s Upper Mines Fish Set.',
     category: 'Fish',
-    acquisition: 'See the forthcoming Stone Loach guide for verified location and season details.',
+    acquisition: 'Fish the water pools on the early floors of the Upper Mines and target medium shadows; no time-of-day requirement is established by the cited guides.',
     relatedSlugs: ['water-chestnuts'],
-    sources: []
+    sources: [
+      { label: 'Fandom: Stone Loach', url: 'https://fields-of-mistria.fandom.com/wiki/Stone_Loach' },
+      { label: 'Destructoid: Stone Loach Guide', url: 'https://www.destructoid.com/how-to-catch-a-stone-loach-in-fields-of-mistria/' },
+      { label: 'Steam Community: Fishing Guide', url: 'https://steamcommunity.com/sharedfiles/filedetails/?id=3317450798' },
+      { label: 'YouTube: Stone Loach Video', url: 'https://www.youtube.com/watch?v=TRQ5vT-DWvU' }
+    ]
   },
   {
     slug: 'shovel',
     name: 'Shovel',
-    summary: 'A tool entry reserved for the verified beginner guide.',
+    summary: 'The Worn Shovel expands farm fields, clears or reshapes soil, and opens dig spots for materials and artifacts.',
     category: 'Tool',
-    acquisition: 'See the forthcoming shovel guide for verified acquisition details.',
+    acquisition: 'Buy the Worn Shovel at the General Store for 500 Tesserae in the cited guides; switch or cycle the shop menu if only seeds are visible.',
     relatedSlugs: ['water-chestnuts'],
-    sources: []
+    sources: [
+      { label: 'GameRant: Shovel Guide', url: 'https://gamerant.com/fields-of-mistria-how-get-find-buy-shovel/' },
+      { label: 'TheGamer: Shovel and Upgrade Guide', url: 'https://www.thegamer.com/fields-of-mistria-how-to-get-a-shovel-upgrade/' },
+      { label: 'Fandom: Worn Shovel', url: 'https://fields-of-mistria.fandom.com/wiki/Worn_Shovel' },
+      { label: 'Steam Community: Shovel Discussion', url: 'https://steamcommunity.com/app/2142790/discussions/0/4520011200502631154/' },
+      { label: 'YouTube: Shovel Video', url: 'https://www.youtube.com/watch?v=_naznV2emdE' }
+    ]
   }
 ];
 

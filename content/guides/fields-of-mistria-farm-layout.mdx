@@ -1,13 +1,17 @@
----
-title: "Fields of Mistria Farm Layout: Plan Your Space"
-description: "Fields of Mistria farm layout guide for planning crop plots, barns, paths, storage, trees, and decoration using the collected source-backed tips."
-keyword: "fields of mistria farm layout"
-sources:
-  - "https://mistria.app/planner/"
-  - "https://steamcommunity.com/sharedfiles/filedetails/?id=3728448553"
-  - "https://www.youtube.com/watch?v=2ozebEdzxFM"
-updated: "2026-08-09"
----
+import { defineGuideMetadata } from '@/lib/content';
+
+export const metadata = defineGuideMetadata({
+  slug: 'fields-of-mistria-farm-layout',
+  title: 'Fields of Mistria Farm Layout: Plan Your Space',
+  description: 'Fields of Mistria farm layout guide for planning crop plots, barns, paths, storage, trees, and decoration using the collected source-backed tips.',
+  keyword: 'fields of mistria farm layout',
+  updated: '2026-08-10',
+  sources: [
+    { label: 'Mistria Planner', url: 'https://mistria.app/planner/' },
+    { label: 'Steam Community: Farm Layout Guide', url: 'https://steamcommunity.com/sharedfiles/filedetails/?id=3728448553' },
+    { label: 'YouTube: Farm Layout Video', url: 'https://www.youtube.com/watch?v=2ozebEdzxFM' }
+  ]
+});
 
 # Fields of Mistria Farm Layout: Plan Your Space
 
@@ -25,17 +29,19 @@ Paths are a simple way to make separate areas feel intentional. The collected vi
 
 Think in zones rather than individual tiles: an entry and shipping area, crops, animals, storage, crafting, orchard, and a decorative rest area are useful starting categories. You may prefer symmetry, or you may want a more organic route around trees and water. The sources support both approaches, so choose the one that makes your daily walk easier and fits the atmosphere you want.
 
+<FarmLayoutFigure />
+
 ## Shape crop plots around your watering setup
 
-Crop plots should match what you can water comfortably. One Steam discussion advises sizing plots around the coverage of the watering can so that charging the tool reaches a predictable block of tiles. The collected YouTube material gives specific coverage claims for several watering-can tiers, but those numbers are version-sensitive and should be **To be confirmed** in your game before you design an entire farm around them.
+Crop plots should match what you can water comfortably. One Steam discussion advises sizing plots around the coverage of the watering can so that charging the tool reaches a predictable block of tiles. Watering coverage can change with tool tier and game version, so test a temporary plot before building permanent borders.
 
 Water Sprite Statues are another planning tool in the collected sources. One video says each statue waters in a two-tile radius, which can help you choose field sizes after you unlock them. Verify the range and unlock conditions in your current build, then place a temporary test plot before committing expensive paths or decorative borders around it.
 
-Leave a little flexible ground beside the main fields. Community sources mention seasonal changes, rare seed sources, and the value of rebuilding when a farm no longer feels efficient. The right number of crop types and plots is **To be confirmed** because it depends on season, available seeds, perks, tool level, and how much of the day you want to spend farming.
+Leave a little flexible ground beside the main fields. Community sources mention seasonal changes, rare seed sources, and the value of rebuilding when a farm no longer feels efficient. The right number of crop types and plots depends on the season, available seeds, perks, tool level, and how much of the day you want to spend farming.
 
 ## Plan animal space before adding a herd
 
-If animals will graze outdoors, protect enough grass to feed them. The collected transcript says each animal eats one grass square per day and notes that grass can be consumed faster than it spreads in a busy enclosure. Treat that exact figure as **To be confirmed** until you check the current build, but keep the broader constraint in your plan: a small pen may look tidy while failing to support the animals you place there.
+If animals will graze outdoors, protect enough grass to feed them. The collected transcript reports that each animal eats one grass square per day and notes that grass can be consumed faster than it spreads in a busy enclosure. Check current animal behavior, but keep the broader constraint in your plan: a small pen may look tidy while failing to support the animals you place there.
 
 The same source says barns and coops can be moved by interacting with their sign, removing the building, and rebuilding elsewhere; it also says animals must be sent to Hayden’s daycare before a building containing them is removed. These are useful placement safeguards, but confirm the exact menu language and material-return behavior in-game before relying on them for a major move.
 
@@ -43,7 +49,7 @@ Community layout suggestions include placing coops and barns in a grouped corner
 
 ## Treat fruit trees as a commitment
 
-The collected videos warn that fruit trees cannot be retrieved once planted, so mark their space before you place a sapling. One source says a fruit tree uses a three-by-three cross-shaped footprint, while another simply says to allow a three-by-three area. Because the descriptions are not identical, the exact footprint is **To be confirmed** in the live planting preview; use the shovel or a temporary marker to test it before committing.
+The collected videos warn that fruit trees cannot be retrieved once planted, so mark their space before you place a sapling. One source says a fruit tree uses a three-by-three cross-shaped footprint, while another simply says to allow a three-by-three area. Because the descriptions are not identical, use the live planting preview, the shovel, or a temporary marker to test the footprint before committing.
 
 The sources list seven fruit-tree types and say they do not need watering. They also describe trees as seasonal purchases and highlight the cherry tree’s pink spring appearance. Those facts make an orchard or path-side tree line attractive, but the current availability, season, and sapling costs should be checked in-game rather than copied as fixed data.
 
@@ -57,7 +63,7 @@ Organize categories in a way you can remember. One community example separates i
 
 Decorating needs a resource reserve. The supplied YouTube sources repeatedly call out wood, hardwood, stone, fiber, sod, clay, cattails, flowers, and monster materials as useful for fences, furniture, paths, lighting, and other projects. Rather than selling every early material, keep a modest stockpile so a layout change does not stop halfway through.
 
-Furniture and recipes can come from shops, scrolls, museum rewards, mine chests, festivals, Renown rewards, and the Saturday Market according to the collected material. Shop stock and unlock paths can change, so the exact source for a particular furniture item is **To be confirmed** until checked in the current game. The practical takeaway is to collect a varied supply and design around the pieces you actually own.
+Furniture and recipes can come from shops, scrolls, museum rewards, mine chests, festivals, Renown rewards, and the Saturday Market according to the collected material. Shop stock and unlock paths can change, so use the current item entry for a particular piece. The practical takeaway is to collect a varied supply and design around the pieces you actually own.
 
 ## Improve the layout in small passes
 
@@ -65,6 +71,8 @@ The collected decorating transcript closes with a useful reminder: a farm can re
 
 If you make a change, record what it solved. Did the crop route use less stamina? Did the chest position reduce inventory trips? Did the animal zone keep enough grass? Those concrete observations will give you a better Fields of Mistria farm layout than any one screenshot or rigid grid.
 
-## Sources and verification status
+## Source notes
 
-This page is based on the project’s collected layout-planner material, Steam community discussions, raw webpage text, and YouTube transcripts. They support planning by zones, matching fields to watering capacity, treating trees carefully, grouping storage by use, and refining the farm gradually. Exact footprints, watering ranges, prices, animal consumption, building-removal details, and item availability remain **To be confirmed** where the preserved sources may be version-specific or community-reported.
+This page is based on the cited layout-planner material, Steam community discussions, raw webpage text, and YouTube transcripts. They support planning by zones, matching fields to watering capacity, treating trees carefully, grouping storage by use, and refining the farm gradually.
+
+**Version note:** Footprints, watering ranges, animal behavior, building-removal steps, and item availability may change between releases. Test major placements in the current build before committing rare materials.
