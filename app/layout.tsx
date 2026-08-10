@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { guides } from '@/lib/guides';
+import { items } from '@/lib/items';
+import { createSearchEntries } from '@/lib/search';
 import { absoluteUrl, site, SITE_ORIGIN } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -28,5 +31,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><SiteHeader /><main>{children}</main><SiteFooter /></body></html>;
+  const searchEntries = createSearchEntries(guides, items);
+
+  return <html lang="en"><body><a className="skip-link" href="#main-content">Skip to main content</a><SiteHeader searchEntries={searchEntries} /><main id="main-content">{children}</main><SiteFooter /></body></html>;
 }
