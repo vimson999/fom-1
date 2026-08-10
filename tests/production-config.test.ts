@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 
 type Header = { key: string; value: string };
@@ -13,6 +14,21 @@ type NextConfigUnderTest = {
 import untypedNextConfig from '../next.config.mjs';
 
 const nextConfig = untypedNextConfig as NextConfigUnderTest;
+
+function contentSecurityPolicyFor(nodeEnvironment: 'development' | 'production') {
+  const script = [
+    "import config from './next.config.mjs';",
+    'const rules = await config.headers();',
+    "const header = rules.flatMap(({ headers }) => headers).find(({ key }) => key === 'Content-Security-Policy');",
+    'process.stdout.write(header?.value ?? \'\');'
+  ].join('\n');
+
+  return execFileSync(process.execPath, ['--input-type=module', '--eval', script], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+    env: { ...process.env, NODE_ENV: nodeEnvironment }
+  });
+}
 
 describe('production configuration', () => {
   it('applies secure response headers to every route', async () => {
@@ -30,6 +46,17 @@ describe('production configuration', () => {
     expect(headers['permissions-policy']).toContain('camera=()');
     expect(headers['x-frame-options']).toBe('DENY');
     expect(headers['strict-transport-security']).toContain('max-age=63072000');
+  });
+
+  it('allows React debugging eval in development without weakening production CSP', () => {
+    const developmentPolicy = contentSecurityPolicyFor('development');
+    const productionPolicy = contentSecurityPolicyFor('production');
+
+    expect(developmentPolicy).toContain(
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+    );
+    expect(productionPolicy).toContain("script-src 'self' 'unsafe-inline'");
+    expect(productionPolicy).not.toContain("'unsafe-eval'");
   });
 
   it('fails CI for any known production dependency advisory', () => {
