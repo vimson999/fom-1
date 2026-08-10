@@ -1,5 +1,6 @@
 node_modules
 .next
+.worktrees/
 coverage
 .env
 .env.local
