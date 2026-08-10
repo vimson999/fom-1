@@ -1,4 +1,4 @@
-export type Source = { label: string; url: string };
+import type { ContentSource } from '@/lib/content';
 
 export type WikiItem = {
   slug: string;
@@ -7,7 +7,7 @@ export type WikiItem = {
   category: 'Forage' | 'Fish' | 'Tool';
   acquisition: string;
   relatedSlugs: string[];
-  sources: Source[];
+  sources: readonly ContentSource[];
 };
 
 export const items: WikiItem[] = [
