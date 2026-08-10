@@ -15,7 +15,6 @@ export const site = {
   officialLinks: {
     website: 'https://www.fieldsofmistria.com/', steam: 'https://store.steampowered.com/app/2142790/Fields_of_Mistria/', discord: 'https://discord.gg/fieldsofmistria', youtube: 'https://www.youtube.com/watch?v=0hW64R15-qI'
   },
-  languages: [{ code: 'en', label: 'English', active: true }],
   navigation: [
     { label: 'Home', href: '/' },
     { label: 'Guides', href: '/guides' },
