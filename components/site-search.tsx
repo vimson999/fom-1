@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import { filterSearchEntries, type SearchEntry } from '@/lib/search';
 
 type SiteSearchProps = Readonly<{
@@ -11,6 +12,7 @@ type SiteSearchProps = Readonly<{
 }>;
 
 export function SiteSearch({ entries, open, onClose }: SiteSearchProps) {
+  const dialogRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const results = useMemo(() => filterSearchEntries(entries, query), [entries, query]);
@@ -20,6 +22,30 @@ export function SiteSearch({ entries, open, onClose }: SiteSearchProps) {
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key === 'Escape') {
+      onClose();
+      return;
+    }
+
+    if (event.key !== 'Tab') return;
+
+    const focusable = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])') ?? [])
+      .filter((element) => element.tabIndex >= 0 && !element.hasAttribute('hidden'));
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (!first || !last) return;
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   if (!open) return null;
 
   const status = results.length === 0
@@ -28,7 +54,7 @@ export function SiteSearch({ entries, open, onClose }: SiteSearchProps) {
 
   return (
     <div className="search-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <section className="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-dialog-title" onKeyDown={(event) => { if (event.key === 'Escape') onClose(); }}>
+      <section ref={dialogRef} className="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-dialog-title" onKeyDown={handleKeyDown}>
         <div className="search-dialog-heading">
           <h2 id="search-dialog-title">Search the wiki</h2>
           <button type="button" className="icon-button" aria-label="Close search" onClick={onClose}>×</button>

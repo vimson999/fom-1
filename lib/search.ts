@@ -21,11 +21,11 @@ type ItemSearchRecord = Readonly<{
 }>;
 
 function normalize(value: string) {
-  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+  return value.trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
 function byTitle(left: SearchEntry, right: SearchEntry) {
-  return left.title.localeCompare(right.title);
+  return left.title.localeCompare(right.title, 'en');
 }
 
 export function createSearchEntries(guides: readonly GuideSearchRecord[], items: readonly ItemSearchRecord[]): SearchEntry[] {

@@ -65,4 +65,31 @@ describe('search registry', () => {
     expect(filterSearchEntries(entries, '   ')).toEqual([entries[0], entries[1], entries[3], entries[2]]);
     expect(filterSearchEntries(entries, 'not-a-record')).toEqual([]);
   });
+
+  it('uses invariant matching and ordering when default-locale string methods differ', () => {
+    const localeEntries = [
+      { title: 'Bravo', description: '', keyword: '', category: 'Guide', href: '/bravo' },
+      { title: 'ITEM Guide', description: '', keyword: '', category: 'Guide', href: '/item' },
+      { title: 'Alpha', description: '', keyword: '', category: 'Guide', href: '/alpha' }
+    ] as const;
+    const originalToLocaleLowerCase = String.prototype.toLocaleLowerCase;
+    const originalLocaleCompare = String.prototype.localeCompare;
+
+    String.prototype.toLocaleLowerCase = function (locales?: Intl.LocalesArgument) {
+      return originalToLocaleLowerCase.call(this, locales ?? 'tr');
+    };
+    String.prototype.localeCompare = function (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions) {
+      return locales === undefined
+        ? -originalLocaleCompare.call(this, that, 'en', options)
+        : originalLocaleCompare.call(this, that, locales, options);
+    };
+
+    try {
+      expect(filterSearchEntries(localeEntries, 'item')).toEqual([localeEntries[1]]);
+      expect(filterSearchEntries(localeEntries, '').map((entry) => entry.title)).toEqual(['Alpha', 'Bravo', 'ITEM Guide']);
+    } finally {
+      String.prototype.toLocaleLowerCase = originalToLocaleLowerCase;
+      String.prototype.localeCompare = originalLocaleCompare;
+    }
+  });
 });

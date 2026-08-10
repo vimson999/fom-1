@@ -58,4 +58,27 @@ describe('SiteHeader', () => {
     expect(screen.queryByRole('dialog', { name: /search the wiki/i })).not.toBeInTheDocument();
     expect(button).toHaveFocus();
   });
+
+  it('traps Tab and Shift+Tab inside the search dialog', async () => {
+    const user = userEvent.setup();
+    render(<SiteHeader searchEntries={entries} />);
+    const searchButton = screen.getByRole('button', { name: /search the wiki/i });
+
+    await user.click(searchButton);
+    const dialog = screen.getByRole('dialog', { name: /search the wiki/i });
+    const input = within(dialog).getByRole('searchbox', { name: /search the wiki/i });
+    const closeButton = within(dialog).getByRole('button', { name: /close search/i });
+    const resultLinks = within(dialog).getAllByRole('link');
+    const finalControl = resultLinks[resultLinks.length - 1];
+
+    expect(input).toHaveFocus();
+    await user.tab({ shift: true });
+    expect(closeButton).toHaveFocus();
+    await user.tab({ shift: true });
+    expect(finalControl).toHaveFocus();
+    expect(searchButton).not.toHaveFocus();
+    await user.tab();
+    expect(closeButton).toHaveFocus();
+    expect(searchButton).not.toHaveFocus();
+  });
 });
