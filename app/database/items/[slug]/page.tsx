@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation';
 import { ItemFacts } from '@/components/item-facts';
 import { SourceList } from '@/components/source-list';
 import { getItemBySlug, items } from '@/lib/items';
+import { createItemMetadata } from '@/lib/seo';
 
+export const dynamicParams = false;
 export function generateStaticParams() { return items.map(({ slug }) => ({ slug })); }
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> { const item = getItemBySlug((await params).slug); return item ? { title: item.name, description: item.summary } : {}; }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> { const item = getItemBySlug((await params).slug); return item ? createItemMetadata(item) : {}; }
 
 export default async function ItemDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const item = getItemBySlug((await params).slug); if (!item) notFound();

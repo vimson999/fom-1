@@ -1,5 +1,14 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { site } from '@/lib/site';
+import { JsonLd } from '@/components/json-ld';
+import { absoluteUrl, site } from '@/lib/site';
+import { createPageMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = createPageMetadata({
+  title: 'Fields of Mistria Guide — Source-Based Fan Guides',
+  description: site.description,
+  path: '/'
+});
 
 const categories = [
   ['Beginner Guide', 'Essential tips for your first spring in Mistria including tools, stamina, and making gold.', '/guides'],
@@ -10,6 +19,13 @@ const categories = [
 
 export default function Home() {
   return <>
+    <JsonLd data={{
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: site.name,
+      description: site.description,
+      url: absoluteUrl('/')
+    }} />
     <section className="hero"><div className="shell hero-grid"><div><p className="eyebrow">Fan-Made Community Wiki</p><h1>Fields of Mistria</h1><p className="hero-copy">Restore the town of Mistria in this cozy 90s anime-inspired farming RPG. Farm, fish, mine, craft, and romance 12 eligible villagers!</p><div className="hero-actions"><Link className="button primary" href="/guides">Start Beginner Guide</Link><Link className="button secondary" href="/guides">Romance & Gifts</Link></div></div><a className="hero-mark" href={site.officialLinks.youtube} aria-label="Watch the official trailer"><span>▶</span><i>F</i></a></div></section>
     <section className="shell stats" aria-label="Game overview"><div><strong>Aug 2024</strong><span>Launched</span></div><div><strong>12</strong><span>Romance Candidates</span></div><div><strong>30+</strong><span>Villagers</span></div></section>
     <section className="shell section"><div className="section-heading"><p className="eyebrow">Start Here</p><h2>Your Mistria Journey</h2><p>Choose a starting point, then follow the guide that matches the question you have now.</p></div><div className="category-grid">{categories.map(([name, text, href], index) => <Link href={href} className="category-card" key={name}><span>0{index + 1}</span><h3>{name}</h3><p>{text}</p><b>Explore →</b></Link>)}</div></section>
