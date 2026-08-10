@@ -35,12 +35,26 @@ function displayPath(file: string) {
   return path.relative(root, file);
 }
 
-function visibleProse(source: string) {
-  return source
+function visibleProse(source: string, file?: string) {
+  const relativePath = file ? displayPath(file).split(path.sep).join('/') : '';
+  let visible = source;
+
+  if (relativePath.startsWith('content/guides/') && relativePath.endsWith('.mdx')) {
+    visible = visible.replace(/export const metadata\s*=\s*defineGuideMetadata\(\{[\s\S]*?\n\}\);/, '');
+  } else if (relativePath === 'lib/items.ts') {
+    visible = visible.replace(/\bsources\s*:\s*\[[\s\S]*?\n\s*\]/g, '');
+  } else if (relativePath === 'lib/site.ts') {
+    visible = visible.replace(/\bofficialLinks\s*:\s*\{[\s\S]*?\n\s*\},/, '');
+  }
+
+  return visible
     .replace(/\]\(https?:\/\/[^)]+\)/g, ']')
-    .replace(/\b(?:href|src)\s*=\s*(?:\{\s*)?(['"`])https?:\/\/.*?\1(?:\s*\})?/g, '')
-    .replace(/\b(?:url|website|steam|discord|youtube)\s*:\s*(['"`])https?:\/\/.*?\1/g, '')
-    .replace(/\bconst\s+productionOrigin\s*=\s*(['"`])https?:\/\/.*?\1/g, '');
+    .replace(/\b(?:href|src)\s*=\s*(?:\{\s*)?(['"`])https?:\/\/.*?\1(?:\s*\})?/g, '');
+}
+
+function assertNoLongVisibleUrl(source: string, file?: string) {
+  const match = visibleProse(source, file).match(/https?:\/\/\S{45,}/);
+  if (match) throw new Error(`Long visible URL: ${match[0]}`);
 }
 
 const launchFiles = launchRoots.flatMap((directory) => collectSourceFiles(path.join(root, directory)));
@@ -69,6 +83,12 @@ describe('launch-facing content quality', () => {
     expect(visibleProse(source)).toMatch(/https?:\/\/\S{45,}/);
   });
 
+  it('rejects a long URL stored on an object property and rendered by property path', () => {
+    const source = "const card = { url: 'https://example.com/a-visible-object-property-url-that-is-long-enough-to-break-a-mobile-viewport' }; <p>{card.url}</p>";
+
+    expect(() => assertNoLongVisibleUrl(source)).toThrow(/Long visible URL/);
+  });
+
   it.each(guideFiles)('%s has one H1 and no raw YAML frontmatter', (file) => {
     const source = fs.readFileSync(file, 'utf8');
     expect(source.match(/^#\s+.+$/gm)?.length ?? 0, `${displayPath(file)} must have exactly one H1`).toBe(1);
@@ -76,6 +96,6 @@ describe('launch-facing content quality', () => {
   });
 
   it.each(launchFiles)('%s has no long raw URL in visible prose', (file) => {
-    expect(visibleProse(fs.readFileSync(file, 'utf8')), `${displayPath(file)} contains a long raw URL`).not.toMatch(/https?:\/\/\S{45,}/);
+    expect(() => assertNoLongVisibleUrl(fs.readFileSync(file, 'utf8'), file), `${displayPath(file)} contains a long raw URL`).not.toThrow();
   });
 });
