@@ -57,22 +57,37 @@ Expected: `package.json` and `package-lock.json` add `@next/third-parties` 16.3.
 Create `tests/google-analytics.test.tsx`:
 
 ```tsx
-import { renderToStaticMarkup } from 'react-dom/server';
+import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
-vi.mock('@next/third-parties/google', () => ({
-  GoogleAnalytics: ({ gaId }: { gaId: string }) => <i data-ga-id={gaId} />
+vi.mock('@/lib/guides', () => ({
+  guides: [],
+  getGuideBySlug: () => undefined
 }));
 
-import RootLayout from '@/app/layout';
-
 describe('Google Analytics integration', () => {
-  it('renders the configured GA4 tag exactly once from the root layout', () => {
-    const html = renderToStaticMarkup(
-      <RootLayout><p>Route content</p></RootLayout>
-    );
+  it('renders the configured GA4 tag exactly once from the root layout', async () => {
+    const { default: RootLayout } = await import('@/app/layout');
+    const layout = RootLayout({ children: <p>Route content</p> });
+    const analyticsNodes: ReactElement<{ gaId: string }>[] = [];
 
-    expect(html.match(/data-ga-id="G-J5CTEBXCRF"/g) ?? []).toHaveLength(1);
+    function visit(node: ReactNode) {
+      Children.forEach(node, (child) => {
+        if (!isValidElement(child)) return;
+
+        const element = child as ReactElement<{ children?: ReactNode; gaId?: string }>;
+        if (element.type === GoogleAnalytics) {
+          analyticsNodes.push(element as ReactElement<{ gaId: string }>);
+        }
+        visit(element.props.children);
+      });
+    }
+
+    visit(layout);
+
+    expect(analyticsNodes).toHaveLength(1);
+    expect(analyticsNodes[0].props.gaId).toBe('G-J5CTEBXCRF');
   });
 });
 ```
@@ -162,12 +177,12 @@ Replace the first privacy section and add an analytics section with this copy:
 ```tsx
 <section>
   <h2>Information this site does not collect</h2>
-  <p>This site provides no accounts, payments, comments, uploads, advertising, or newsletter collection.</p>
+  <p>This site provides no accounts, payments, comments, or uploads. It has no advertising and performs no newsletter collection.</p>
 </section>
 <section>
   <h2>Google Analytics</h2>
   <p>We use Google Analytics to understand page activity and improve this guide. Google Analytics may process visited pages, referrer information, browser and device details, approximate location, and identifiers or cookies used to distinguish visits.</p>
-  <p>Google processes this analytics data under its own privacy policies. We do not use advertising cookies or enable advertising personalization on this site.</p>
+  <p>Google processes this analytics data under its own privacy policies. No advertising cookies are used, and advertising personalization is not enabled on this site.</p>
 </section>
 ```
 

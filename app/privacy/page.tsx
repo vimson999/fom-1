@@ -19,7 +19,12 @@ export default function PrivacyPage() {
       <div className="legal-copy">
         <section>
           <h2>Information this site does not collect</h2>
-          <p>At launch, this site provides no accounts, payments, comments, or uploads. It uses no first-party analytics, sets no advertising cookies, and performs no newsletter collection.</p>
+          <p>This site provides no accounts, payments, comments, or uploads. It has no advertising and performs no newsletter collection.</p>
+        </section>
+        <section>
+          <h2>Google Analytics</h2>
+          <p>We use Google Analytics to understand page activity and improve this guide. Google Analytics may process visited pages, referrer information, browser and device details, approximate location, and identifiers or cookies used to distinguish visits.</p>
+          <p>Google processes this analytics data under its own privacy policies. No advertising cookies are used, and advertising personalization is not enabled on this site.</p>
         </section>
         <section>
           <h2>Technical hosting data</h2>
@@ -31,7 +36,7 @@ export default function PrivacyPage() {
         </section>
         <section>
           <h2>Changes</h2>
-          <p>This policy must be updated before first-party analytics, advertising, accounts, newsletters, or other collection features are enabled.</p>
+          <p>This policy will be updated if advertising, accounts, newsletters, or other collection features are enabled.</p>
           <p>Questions about these terms can be reviewed alongside the <Link className="text-link" href="/terms">Terms of Service</Link>.</p>
         </section>
       </div>

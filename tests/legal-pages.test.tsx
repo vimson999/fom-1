@@ -13,11 +13,17 @@ describe('launch legal pages', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Privacy Policy' })).toBeInTheDocument();
     expect(document.body).toHaveTextContent(/no accounts, payments, comments, or uploads/i);
-    expect(document.body).toHaveTextContent(/no first-party analytics/i);
+    expect(document.body).toHaveTextContent(/Google Analytics/i);
+    expect(document.body).toHaveTextContent(/page activity/i);
+    expect(document.body).toHaveTextContent(/referrer/i);
+    expect(document.body).toHaveTextContent(/browser and device/i);
+    expect(document.body).toHaveTextContent(/approximate location/i);
+    expect(document.body).toHaveTextContent(/Google.*process/i);
     expect(document.body).toHaveTextContent(/no advertising cookies/i);
     expect(document.body).toHaveTextContent(/no newsletter/i);
     expect(document.body).toHaveTextContent(/hosting provider.*server logs/i);
     expect(document.body).toHaveTextContent(/external links.*third part(?:y|ies).*privacy policies/i);
+    expect(document.body).not.toHaveTextContent(/no first-party analytics/i);
   });
 
   it('states the independent fan-project scope and provides no gameplay guarantee', () => {

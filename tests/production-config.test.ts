@@ -52,6 +52,12 @@ describe('production configuration', () => {
     const developmentPolicy = contentSecurityPolicyFor('development');
     const productionPolicy = contentSecurityPolicyFor('production');
 
+    for (const policy of [developmentPolicy, productionPolicy]) {
+      expect(policy).toContain('https://www.googletagmanager.com');
+      expect(policy).toContain('https://*.google-analytics.com');
+      expect(policy).toContain('https://*.analytics.google.com');
+    }
+
     expect(developmentPolicy).toContain(
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
     );
