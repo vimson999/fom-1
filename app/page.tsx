@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { items } from '@/lib/items';
 import { site } from '@/lib/site';
 
 const categories = [
