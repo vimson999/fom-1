@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import { SiteHeader } from '@/components/site-header';
@@ -7,7 +8,10 @@ import { guides } from '@/lib/guides';
 import { items } from '@/lib/items';
 import { createSearchEntries } from '@/lib/search';
 import { absoluteUrl, site, SITE_ORIGIN } from '@/lib/site';
-import { GOOGLE_ANALYTICS_ID } from '@/lib/analytics';
+import {
+  GOOGLE_ADSENSE_SCRIPT_SRC,
+  GOOGLE_ANALYTICS_ID
+} from '@/lib/analytics';
 
 export const metadata: Metadata = {
   metadataBase: SITE_ORIGIN,
@@ -43,6 +47,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <main id="main-content">{children}</main>
         <SiteFooter />
       </body>
+      <Script
+        id="google-adsense"
+        src={GOOGLE_ADSENSE_SCRIPT_SRC}
+        strategy="beforeInteractive"
+        async
+        crossOrigin="anonymous"
+      />
       <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
     </html>
   );

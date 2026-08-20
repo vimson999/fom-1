@@ -19,7 +19,9 @@ describe('launch legal pages', () => {
     expect(document.body).toHaveTextContent(/browser and device/i);
     expect(document.body).toHaveTextContent(/approximate location/i);
     expect(document.body).toHaveTextContent(/Google.*process/i);
-    expect(document.body).toHaveTextContent(/no advertising cookies/i);
+    expect(document.body).toHaveTextContent(/Google AdSense/i);
+    expect(document.body).toHaveTextContent(/advertising cookies|advertising identifiers/i);
+    expect(document.body).toHaveTextContent(/no configured ad slots/i);
     expect(document.body).toHaveTextContent(/no newsletter/i);
     expect(document.body).toHaveTextContent(/hosting provider.*server logs/i);
     expect(document.body).toHaveTextContent(/external links.*third part(?:y|ies).*privacy policies/i);

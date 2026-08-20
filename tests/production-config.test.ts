@@ -56,6 +56,10 @@ describe('production configuration', () => {
       expect(policy).toContain('https://www.googletagmanager.com');
       expect(policy).toContain('https://*.google-analytics.com');
       expect(policy).toContain('https://*.analytics.google.com');
+      expect(policy).toContain('https://pagead2.googlesyndication.com');
+      expect(policy).toContain('https://*.googlesyndication.com');
+      expect(policy).toContain('https://*.doubleclick.net');
+      expect(policy).toContain("frame-src 'self' https://googleads.g.doubleclick.net https://*.googlesyndication.com");
     }
 
     expect(developmentPolicy).toContain(
