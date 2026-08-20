@@ -1,5 +1,4 @@
 import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
-import Script from 'next/script';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/guides', () => ({
@@ -8,15 +7,10 @@ vi.mock('@/lib/guides', () => ({
 }));
 
 describe('Google AdSense integration', () => {
-  it('renders the configured loader exactly once from the root layout', async () => {
+  it('renders one native AdSense loader in the document head', async () => {
     const { default: RootLayout } = await import('@/app/layout');
     const layout = RootLayout({ children: <p>Route content</p> });
-    const scriptNodes: ReactElement<{
-      src?: string;
-      crossOrigin?: string;
-      strategy?: string;
-      async?: boolean;
-    }>[] = [];
+    const headNodes: ReactElement<{ children?: ReactNode }>[] = [];
 
     function visit(node: ReactNode) {
       Children.forEach(node, (child) => {
@@ -26,17 +20,39 @@ describe('Google AdSense integration', () => {
           children?: ReactNode;
           src?: string;
           crossOrigin?: string;
-          strategy?: string;
           async?: boolean;
         }>;
-        if (element.type === Script) {
-          scriptNodes.push(element as ReactElement<{ src?: string; crossOrigin?: string; strategy?: string; async?: boolean }>);
-        }
+        if (element.type === 'head') headNodes.push(element);
         visit(element.props.children);
       });
     }
 
     visit(layout);
+
+    expect(headNodes).toHaveLength(1);
+
+    const scriptNodes: ReactElement<{
+      src?: string;
+      crossOrigin?: string;
+      async?: boolean;
+    }>[] = [];
+
+    function visitHead(node: ReactNode) {
+      Children.forEach(node, (child) => {
+        if (!isValidElement(child)) return;
+
+        const element = child as ReactElement<{
+          children?: ReactNode;
+          src?: string;
+          crossOrigin?: string;
+          async?: boolean;
+        }>;
+        if (element.type === 'script') scriptNodes.push(element);
+        visitHead(element.props.children);
+      });
+    }
+
+    visitHead(headNodes[0].props.children);
 
     const adsenseNodes = scriptNodes.filter((node) =>
       node.props.src?.startsWith('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=')
@@ -47,7 +63,6 @@ describe('Google AdSense integration', () => {
       'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5054963576840100'
     );
     expect(adsenseNodes[0].props.crossOrigin).toBe('anonymous');
-    expect(adsenseNodes[0].props.strategy).toBe('beforeInteractive');
     expect(adsenseNodes[0].props.async).toBe(true);
   });
 });

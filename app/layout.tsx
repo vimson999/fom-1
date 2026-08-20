@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import { SiteHeader } from '@/components/site-header';
@@ -41,19 +40,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
   return (
     <html lang="en">
+      <head>
+        <script
+          async
+          src={GOOGLE_ADSENSE_SCRIPT_SRC}
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <SiteHeader searchEntries={searchEntries} />
         <main id="main-content">{children}</main>
         <SiteFooter />
       </body>
-      <Script
-        id="google-adsense"
-        src={GOOGLE_ADSENSE_SCRIPT_SRC}
-        strategy="beforeInteractive"
-        async
-        crossOrigin="anonymous"
-      />
       <GoogleAnalytics gaId={GOOGLE_ANALYTICS_ID} />
     </html>
   );
