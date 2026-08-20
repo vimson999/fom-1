@@ -31,6 +31,18 @@ function contentSecurityPolicyFor(nodeEnvironment: 'development' | 'production')
 }
 
 describe('production configuration', () => {
+  it('does not collect linked worktrees as duplicate test suites', () => {
+    const vitestConfig = fs.readFileSync(path.join(process.cwd(), 'vitest.config.mts'), 'utf8');
+
+    expect(vitestConfig).toContain("'**/.worktrees/**'");
+  });
+
+  it('does not lint linked worktrees as application source', () => {
+    const eslintConfig = fs.readFileSync(path.join(process.cwd(), 'eslint.config.mjs'), 'utf8');
+
+    expect(eslintConfig).toContain("'.worktrees/**'");
+  });
+
   it('applies secure response headers to every route', async () => {
     const headersConfig = await nextConfig.headers?.();
     const globalHeaders = headersConfig?.find(({ source }) => source === '/:path*');
